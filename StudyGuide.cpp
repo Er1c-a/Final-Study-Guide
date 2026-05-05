@@ -50,6 +50,7 @@ IntVector(int length) {          // allocates memory
 ~IntVector() // frees memory — called automatically
 {
     delete[] m_list;
+    m_list = nullptr;
 }
 ----------------------------------------------------------------
 //Function Chaining
@@ -138,3 +139,13 @@ Number operator+(const Number &n)
 }
 //Allows for
 Number n3 = n1 + n2;
+
+-----------------------------------------------------------------
+//Pratice test 1
+
+//Pointer variable pointing to an array
+Item* m_backpack = nullptr;
+
+//Accessing an array & matching it to a given rarity
+if(m_backpack[i].rarity == rarity)
+
