@@ -45,3 +45,6 @@ if(partner.pickUpItem(item))
 {
     dropItem(item_name);
 }
+
+//If member is private, have to use getters in the loops
+if(m_pet_list[i].getName() == pet.getName())
