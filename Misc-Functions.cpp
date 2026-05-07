@@ -25,17 +25,18 @@ Pet::Pet(const string& pet_name,const Species& pet_species,const int& hunger, co
 }
 
 //Deleting an element & lowering an array by one
-for(int i = 0; i<m_num_items; i++)
-{
-    if(m_backpack[i].name == item_name)
-    {
-        for(int j=i; j<m_num_items-1;j++)
-        {
-            m_backpack[j] = m_backpack[j+1];
+bool removeByName(std::string name) {
+    for (int i = 0; i < m_length; i++) {
+        if (m_arr[i].name == name) {
+            // Shift everything left
+            for (int j = i; j < m_length - 1; j++) {
+                m_arr[j] = m_arr[j + 1];
+            }
+            m_length--;
+            return true;
         }
-        m_num_items--;
-        return true;
     }
+    return false; // not found
 }
 
 //Adding an element & Increasing an array by one
@@ -56,6 +57,23 @@ if(partner.pickUpItem(item))
     dropItem(item_name);
 }
 
+//Transfering
+bool transferTo(MyClass& recipient, std::string itemName) {
+    // 1. Validate
+    if (this->m_id == recipient.m_id) return false;  // same object check
+    int idx = findIndex(itemName);
+    if (idx == -1) return false;                      // item not found
+    if (recipient.alreadyExists(itemName)) return false; // recipient has it
+
+    // 2. Add to recipient
+    recipient.addItem(m_arr[idx]);
+
+    // 3. Remove from self
+    removeByName(itemName);
+
+    return true;
+}
+
 //If member is private, have to use getters in the loops
 if(m_pet_list[i].getName() == pet.getName())
 
@@ -74,17 +92,21 @@ Post::Post(string content) :
 }
 
 //Doubles the capacity
-void Post::doubleCapacity(User*& table, int& capacity)
-{
-    User* temp_table = new User[capacity*2];
-    for(int i = 0; i<capacity;i++)
-    {
-        temp_table[i] = table[i];
+void expandIfNeeded() {
+    if (m_length >= m_capacity) {
+        m_capacity *= 2;
+        MyStruct* newArr = new MyStruct[m_capacity];
+
+        // Copy old data
+        for (int i = 0; i < m_length; i++) {
+            newArr[i] = m_arr[i];
+        }
+
+        delete[] m_arr;   // free old array
+        m_arr = newArr;   // point to new array
     }
-    delete[] table;
-    capacity = capacity*2;
-    table = temp_table;
 }
+
 
 ------------------------------------------------------------
 // Test 4
