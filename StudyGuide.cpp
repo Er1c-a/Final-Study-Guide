@@ -149,3 +149,30 @@ Item* m_backpack = nullptr;
 //Accessing an array & matching it to a given rarity
 if(m_backpack[i].rarity == rarity)
 
+-----------------------------------------------------------------
+//Pratice test 4
+
+//Instructions-dynamcially allocates an array of TicketTransaction structs with a size of 
+// m_capacity stores it in m_log leads to the bottom part of the constructor
+ConcertAccount::ConcertAccount() :
+    m_name{"unnamed"},
+    m_id{0},
+    m_ticketBalance{0},
+    m_capacity{2},
+    m_length{0},
+    m_log{new TicketTransaction[2]}
+{
+} 
+
+//Increments the ID
+ConcertAccount::ConcertAccount(string name):
+    m_name{name},
+    m_id{s_nextId},
+    m_ticketBalance{0},
+    m_capacity{2},
+    m_length{0},
+    m_log{new TicketTransaction[2]}
+
+{
+    s_nextId++;
+}

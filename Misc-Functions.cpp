@@ -72,3 +72,57 @@ Post::Post(string content) :
 {
     m_next_id++;
 }
+
+//Doubles the capacity
+void Post::doubleCapacity(User*& table, int& capacity)
+{
+    User* temp_table = new User[capacity*2];
+    for(int i = 0; i<capacity;i++)
+    {
+        temp_table[i] = table[i];
+    }
+    delete[] table;
+    capacity = capacity*2;
+    table = temp_table;
+}
+
+------------------------------------------------------------
+// Test 4
+
+//Another way to transfer things between accounts
+bool ConcertAccount::transferTickets(ConcertAccount& recipient, int count)
+{
+    if(count <= 0 || count > m_ticketBalance || m_id == recipient.m_id)
+    {
+        return false;
+    }
+    m_ticketBalance -= count;
+    addTransaction(TransactionType::TRANSFER_OUT, count, recipient.m_id);
+    recipient.m_ticketBalance += count;
+    recipient.addTransaction(TransactionType::TRANSFER_IN, count, m_id);
+    return true;
+}
+
+//Undoing the last transaction
+bool ConcertAccount::undoLastTransaction()
+{
+    if(m_length == 0)
+    {
+        return false;
+    }
+    TicketTransaction last = m_log[m_length - 1];
+    if(last.type == TransactionType::TRANSFER_IN || last.type == TransactionType::TRANSFER_OUT)
+    {
+        return false;
+    }
+    if(last.type == TransactionType::BUY)
+    {
+        m_ticketBalance -= last.count;
+    }
+    else if(last.type == TransactionType::REFUND)
+    {
+        m_ticketBalance += last.count;
+    }
+    m_length--;
+    return true;
+}
