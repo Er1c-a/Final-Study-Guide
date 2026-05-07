@@ -14,6 +14,16 @@ Time operator+(Time& lhs, Time& rhs) {
 ----------------------------------------------------------------
 //Pratice Test 1
 
+//Primary constructor setup
+Pet::Pet(const string& pet_name,const Species& pet_species,const int& hunger, const int& energy, const int& happiness)
+{
+    m_name = pet_name;
+    m_species = pet_species;
+    m_hunger = hunger;
+    m_energy =energy;
+    m_happiness = happiness;
+}
+
 //Deleting an element & lowering an array by one
 for(int i = 0; i<m_num_items; i++)
 {
@@ -48,3 +58,17 @@ if(partner.pickUpItem(item))
 
 //If member is private, have to use getters in the loops
 if(m_pet_list[i].getName() == pet.getName())
+
+
+------------------------------------------------------------
+//Test 2
+
+//Setting up constructor
+Post::Post(string content) : 
+    m_content{content}, 
+    m_post_id{m_next_id},
+    m_viewed{new User[50]}, 
+    m_likes{new User[25]}
+{
+    m_next_id++;
+}
