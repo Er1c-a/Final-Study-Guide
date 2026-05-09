@@ -1,9 +1,8 @@
 //.h file
+#pragma once
 #include <string>
 #include <cmath>
-// YOU ARE NOT ALLOWED TO ADD OTHER LIBRARIES
 using namespace std;
-
 enum class Species
 {
     DOG,
@@ -11,7 +10,6 @@ enum class Species
     BIRD,
     FISH
 };
-
 class Pet
 {
     private:
@@ -24,7 +22,7 @@ class Pet
         Pet();
         Pet(const string& pet_name,const Species& pet_species,const int& hunger, const int& energy, const int& happiness);
         string getName() const;
-        int getWellBeingScore();
+        int getWellBeingScore() const;
         void feed();
         void play();
         void rest();
@@ -50,6 +48,7 @@ bool isPetBelongsToOwner(const Pet& pet, const Owner& owner);
 ------------------------------------------------------------------------------------
 //.cpp file
 #include "code.h"
+//  YOU ARE NOT ALLOWED TO ADD ANY LIBRARIES
 Pet::Pet()
 {
     m_name = "Unknown";
@@ -63,31 +62,38 @@ Pet::Pet(const string& pet_name,const Species& pet_species,const int& hunger, co
 {
     m_name = pet_name;
     m_species = pet_species;
-    m_hunger = hunger;
-    m_energy =energy;
-    m_happiness = happiness;
+    m_hunger = (hunger < 0) ? 0 : (hunger > 100) ? 100 : hunger;
+    m_energy =(energy < 0) ? 0 : (energy > 100) ? 100 : energy;
+    m_happiness = (happiness < 0) ? 0 : (happiness > 100) ? 100 : happiness;
 }
 string Pet::getName() const
 {
     return m_name;
 }
-int Pet::getWellBeingScore()
+int Pet::getWellBeingScore() const
 {
     return round(m_energy * 0.3 + m_happiness * 0.3 + (100 - m_hunger) * 0.4);
 }
 void Pet::feed()
 {
     m_hunger -=20;
+    if (m_hunger < 0) m_hunger = 0;
+    m_happiness += 5;
+    if (m_happiness > 100) m_happiness = 100;
 }
 void Pet::play()
 {
-    m_energy -=10;
-    m_happiness +=15;
-    m_hunger +=5;
+    m_energy -= 10;
+    if (m_energy < 0) m_energy = 0;
+    m_happiness += 15;
+    if (m_happiness > 100) m_happiness = 100;
+    m_hunger += 5;
+    if (m_hunger > 100) m_hunger = 100;
 }
 void Pet::rest()
 {
-    m_energy +=20;
+    m_energy += 20;
+    if (m_energy > 100) m_energy = 100;
 }
 
 Owner::Owner()
@@ -101,7 +107,10 @@ Owner::Owner(const Owner& owner)
 {
     m_name = owner.m_name;
     m_num_of_pets = owner.m_num_of_pets;
-    m_pet_list = owner.m_pet_list;
+    m_pet_list = new Pet[m_num_of_pets];       // allocate new array
+    for (int i = 0; i < m_num_of_pets; i++) {
+        m_pet_list[i] = owner.m_pet_list[i];   // copy each pet
+    }
 }
 Owner::~Owner()
 {
