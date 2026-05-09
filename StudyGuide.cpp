@@ -42,9 +42,9 @@ public:
 //If your constructor calls new, the destructor must call delete (or delete[] for arrays).
 
 //Destructor must have the same name as the constructor
-IntVector(int length) {          // allocates memory
+IntVector(int length) {
         assert(length > 0);
-        m_list   = new int[length]{};
+        m_list   = new int[length]{}; // new allocates memory
         m_length = length;
     }
 ~IntVector() // frees memory — called automatically
