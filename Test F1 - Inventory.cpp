@@ -11,7 +11,7 @@ enum class ItemRarity
 };
 struct Item
 {
-    string name = "Unknown";
+    string name = "";
     double value = 0.0;
     ItemRarity rarity = ItemRarity::COMMON;
 };
@@ -24,6 +24,7 @@ class Character
         double m_money = 0.0;
     public:
         Character();
+        Character(const string name, double money);
         Character(const string name, double money, const vector<Item>& items);
         ~Character();
         string getName() const;
@@ -40,15 +41,38 @@ class Character
 Character::Character()
 {
 }
+Character::Character(const string name, double money)
+{
+    m_name = name;
+    m_money = money;
+}
 Character::Character(const string name, double money, const vector<Item>& items)
 {
     m_name = name;
-    m_num_items = items.size();
     m_money = money;
-    m_backpack = new Item[m_num_items];
-    for(int i = 0; i< m_num_items; i++)
+    // Deduplicate: keep highest rarity for duplicate names
+    vector<Item> unique_items;
+    for (const auto& item : items)
     {
-        m_backpack[i] = items[i];
+        bool found = false;
+        for (auto& u : unique_items)
+        {
+            if (u.name == item.name)
+            {
+                found = true;
+                if (item.rarity > u.rarity)  // keep higher rarity
+                    u = item;
+                break;
+            }
+        }
+        if (!found)
+            unique_items.push_back(item);
+    }
+    m_num_items = unique_items.size();
+    m_backpack = new Item[m_num_items];
+    for (int i = 0; i < m_num_items; i++)
+    {
+        m_backpack[i] = unique_items[i];
     }
 }
 Character::~Character()
