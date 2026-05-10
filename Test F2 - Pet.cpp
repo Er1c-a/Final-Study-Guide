@@ -48,7 +48,6 @@ bool isPetBelongsToOwner(const Pet& pet, const Owner& owner);
 ------------------------------------------------------------------------------------
 //.cpp file
 #include "code.h"
-//  YOU ARE NOT ALLOWED TO ADD ANY LIBRARIES
 Pet::Pet()
 {
     m_name = "Unknown";
